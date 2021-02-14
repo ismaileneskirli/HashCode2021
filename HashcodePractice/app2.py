@@ -2,7 +2,7 @@ import operator
 import random
 from collections import OrderedDict
 from operator import itemgetter
-file = open("c_many_ingredients.in","r")
+file = open("e_many_teams.in","r")
 lines = []
 given_pizzas = []
 
@@ -23,8 +23,8 @@ pizza_number = int(first_line[0])#How many pizza do we have ?
 two_groups = int(first_line[1]) # How many groups there are with 2 people ?
 three_groups = int(first_line[2]) # 3 people 
 four_groups = int(first_line[3]) # 4 people
-
-i = 1
+no_teams_given = 0
+i = 0
 for line in file:
     line = line.rstrip() #stripping by spaces lines from file.
     ingredient_nbr=int(line.split()[0]) # first element of stripped line is number of ingredients.
@@ -72,12 +72,13 @@ def distribute(groupSize): # This function finds the optimal pizzas to distribut
     global two_groups
     global three_groups
     global four_groups
+    global no_teams_given
     for i in range (100):   # find the max nbr of ingredients in 100 epoques
         randomArr.clear()
         # generate groupSize different numbers in range 1-6
         #print(randomArr)
         if groupSize == 4:
-            randomArr= random.sample(range(0, int(len(sorted_list)/3)), groupSize)
+            randomArr= random.sample(range(-1,int(len(sorted_list))), groupSize)
             if max < compare(sorted_list[randomArr[0]][2],
             sorted_list[randomArr[1]][2],sorted_list[randomArr[2]][2],
             sorted_list[randomArr[3]][2]):
@@ -87,15 +88,17 @@ def distribute(groupSize): # This function finds the optimal pizzas to distribut
                 sorted_list[randomArr[3]][2])
                 keystoPop = Cloning(randomArr) 
         if groupSize == 3:
-            randomArr= random.sample(range(0, int(len(sorted_list)*2/3)), groupSize)            
+            randomArr= random.sample(range(-1,int(len(sorted_list))), groupSize)            
             if max < compare(sorted_list[randomArr[0]][2],
             sorted_list[randomArr[1]][2],sorted_list[randomArr[2]][2]):
+                keystoPop.clear()
                 max = compare(sorted_list[randomArr[0]][2],sorted_list[randomArr[1]][2],sorted_list[randomArr[2]][2])
                 keystoPop = Cloning(randomArr)     
         if groupSize == 2:
-            randomArr= random.sample(range(0, len(sorted_list)), groupSize)            
+            randomArr= random.sample(range(-1,len(sorted_list)), groupSize)            
             if max < compare(sorted_list[randomArr[0]][2],sorted_list[randomArr[1]][2]):
                 max = compare(sorted_list[randomArr[0]][2],sorted_list[randomArr[1]][2])
+                keystoPop.clear()
                 keystoPop = Cloning(randomArr) 
     #TODO:max olduğu zamanki pizzaları dağıt, sonra listden çıkar.,
     if groupSize == 4 :       
@@ -109,9 +112,6 @@ def distribute(groupSize): # This function finds the optimal pizzas to distribut
         #print(keystoPop)
         for item in keystoPop:
             sorted_list.pop(item)
-
-        print(max)
-        #print(distribution)
 
     if groupSize == 3 :       
         #print(keystoPop)
@@ -134,7 +134,7 @@ def distribute(groupSize): # This function finds the optimal pizzas to distribut
         #print(two_groups)
         for item in keystoPop:
             sorted_list.pop(item)
-    print("still distrubing")
+    no_teams_given +=1
 
 while len(sorted_list) != 0:
     if len(sorted_list)  >= 4 and four_groups > 0: 
@@ -148,8 +148,8 @@ while len(sorted_list) != 0:
 
 
 
-f = open("c.txt", "w")
-
+f = open("e.txt", "w")
+given_pizzas.insert(0,str(no_teams_given))
 for line in given_pizzas:
      f.write(line + "\n")
 f.close()

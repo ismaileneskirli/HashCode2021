@@ -1,3 +1,3 @@
 # HashCodePrep
 
-Here is my solution for Hashcode2021 preparation problem. 
+Here is our solution for Hashcode2021 preparation problem. 
